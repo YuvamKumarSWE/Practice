@@ -1,22 +1,20 @@
-import { useState } from "react";
-import Button from "./Button";
+import { useState, useEffect } from "react";
+import Inventory from "./Inventory";
+import Search from "./Search";
 
 function App(){
 
   let currentIndex = 2;
 
-  const [inventory, setInventory] = useState([
-    {
-      name: "Ramen",
-      quantity: 5, 
-      index: 1
-    },
-    {
-      name: "Knife",
-      quantity: 15, 
-      index: 2
-    }
-  ]);
+  const [inventory, setInventory] = useState(() => {
+    const savedInventory = localStorage.getItem('storeInventory');
+    return savedInventory;
+  });
+
+  // Save to localStorage whenever inventory changes
+  useEffect(() => {
+    localStorage.setItem('storeInventory', JSON.stringify(inventory));
+  }, [inventory]);
 
   function updateQuantity(name){
     setInventory(prevInventory => 
@@ -28,13 +26,35 @@ function App(){
     );
   }
 
+  function addItem(itemName){
+    currentIndex++;
+    setInventory(prevInventory => [
+      ...prevInventory,
+      {
+        name: itemName,
+        quantity: 1,
+        index: currentIndex
+      }
+    ]);
+  }
+
+  function clearInventory(){
+    localStorage.removeItem('storeInventory');
+    setInventory([]);
+  }
+
   return(
-    <div className="flex gap-4 text-2xl p-4  ">
-    {
-      inventory.map((item, index) => (
-        <Button key={index} title={item.name} quantity={item.quantity} onClick={()=>updateQuantity(item.name)} />
-      ))
-    }
+
+    <div className="flex flex-col p-5">
+
+      <Search addItem={addItem}/>
+      <Inventory inventory={inventory} updateQuantity={updateQuantity} />
+      <pre className="text-sm bg-gray-100 p-2 rounded">
+        {JSON.stringify(inventory, null, 2)}
+      </pre>
+      <button onClick={clearInventory} className="bg-red-500 text-white p-2 rounded">
+        Clear All
+      </button>
     </div>
   );
 }
