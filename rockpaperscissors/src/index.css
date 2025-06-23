@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-alumni: "Alumni Sans SC", sans-serif;
+    --font-megrim: "Megrim", cursive;
+    --font-noto: "Noto Znamenny Musical Notation", serif;
+    --font-orbitron: "Orbitron", monospace;
+    --font-yatra: "Yatra One", cursive;
+  }
+}
+
+@layer utilities {
+  .font-alumni { font-family: var(--font-alumni); }
+  .font-megrim { font-family: var(--font-megrim); }
+  .font-noto { font-family: var(--font-noto); }
+  .font-orbitron { font-family: var(--font-orbitron); }
+  .font-yatra { font-family: var(--font-yatra); }
+}
